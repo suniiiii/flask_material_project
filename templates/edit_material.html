@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><title>Edit Material</title></head>
+<body>
+    <h2>Edit Material</h2>
+    <form method="POST">
+        <label>Name:</label>
+        <input type="text" name="name" value="{{ material.name }}" required><br>
+        <label>Quantity:</label>
+        <input type="number" name="quantity" step="any" value="{{ material.quantity }}" required><br>
+        <label>Price:</label>
+        <input type="number" name="price" step="any" value="{{ material.price }}" required><br>
+        <button type="submit">Update</button>
+    </form>
+    <a href="{{ url_for('home') }}">Back</a>
+</body>
+</html>
