@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Replace the URL with your repository URL and branch if needed
-                git url: 'https://github.com/your-username/flask_material_project.git', branch: 'main'
+                git url: 'https://github.com/suniiiii/flask_material_project.git', branch: 'main'
             }
         }
         stage('Set Up Environment') {
