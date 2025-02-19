@@ -4,37 +4,41 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Replace the URL with your repository URL and branch if needed
+                // Clone the repository from GitHub
                 git url: 'https://github.com/suniiiii/flask_material_project.git', branch: 'main'
             }
         }
+        
         stage('Set Up Environment') {
             steps {
-                // Create a virtual environment and install dependencies
+                // Create a virtual environment, upgrade pip, and install requirements
                 sh 'python3 -m venv venv'
                 sh './venv/bin/pip install --upgrade pip'
                 sh './venv/bin/pip install -r requirements.txt'
             }
         }
+        
         stage('Run Tests') {
             steps {
-                // Run tests if you have any (e.g., using pytest)
+                // Run tests using pytest (adjust or remove if not applicable)
+                // If you don't have tests, you can comment out this stage.
                 sh './venv/bin/python -m pytest'
             }
         }
+        
         stage('Deploy') {
             steps {
-                // Example: Restart your Flask app via systemd or another method.
-                // Adjust this step to suit your deployment process.
+                // Restart your Flask application via systemd
+                // Ensure the Jenkins user can execute this command without a password
                 sh 'sudo systemctl restart flask_app.service'
             }
         }
     }
-
+    
     post {
         failure {
-            // Notify if the build fails, e.g., email or Slack notifications.
             echo 'Build or Deployment failed!'
+            // Optionally add notifications here (e.g., email, Slack)
         }
         success {
             echo 'Deployment succeeded!'
