@@ -11,7 +11,7 @@ pipeline {
         
         stage('Set Up Environment') {
             steps {
-                // Create a virtual environment, upgrade pip, and install requirements
+                // Create a virtual environment, upgrade pip, and install dependencies
                 sh 'python3 -m venv venv'
                 sh './venv/bin/pip install --upgrade pip'
                 sh './venv/bin/pip install -r requirements.txt'
@@ -20,8 +20,7 @@ pipeline {
         
         stage('Run Tests') {
             steps {
-                // Run tests using pytest (adjust or remove if not applicable)
-                // If you don't have tests, you can comment out this stage.
+                // Run tests using pytest (adjust or remove this stage if you don't have tests)
                 sh './venv/bin/python -m pytest'
             }
         }
@@ -29,7 +28,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 // Restart your Flask application via systemd
-                // Ensure the Jenkins user can execute this command without a password
+                // Make sure the Jenkins user can run this command without a password
                 sh 'sudo systemctl restart flask_app.service'
             }
         }
@@ -38,7 +37,7 @@ pipeline {
     post {
         failure {
             echo 'Build or Deployment failed!'
-            // Optionally add notifications here (e.g., email, Slack)
+            // You can add additional notification steps here (e.g., email or Slack)
         }
         success {
             echo 'Deployment succeeded!'
