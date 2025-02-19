@@ -20,15 +20,23 @@ pipeline {
         
         stage('Run Tests') {
             steps {
-                // Run tests using pytest (adjust or remove this stage if you don't have tests)
-                sh './venv/bin/python -m pytest'
+                script {
+                    // Run tests using pytest and capture the exit code
+                    def result = sh(script: './venv/bin/python -m pytest', returnStatus: true)
+                    if (result == 5) {
+                        echo "No tests collected. Continuing pipeline."
+                    } else if (result != 0) {
+                        error "Tests failed with exit code ${result}."
+                    } else {
+                        echo "Tests passed successfully."
+                    }
+                }
             }
         }
         
         stage('Deploy') {
             steps {
-                // Restart your Flask application via systemd
-                // Make sure the Jenkins user can run this command without a password
+                // Restart the Flask application using systemd (ensure Jenkins has passwordless sudo)
                 sh 'sudo systemctl restart flask_app.service'
             }
         }
@@ -37,7 +45,7 @@ pipeline {
     post {
         failure {
             echo 'Build or Deployment failed!'
-            // You can add additional notification steps here (e.g., email or Slack)
+            // Additional notifications (email, Slack, etc.) can be added here
         }
         success {
             echo 'Deployment succeeded!'
